@@ -15,6 +15,7 @@ namespace PomodoroOnWPF {
         private TimeSpan _curInterval;
 
         private new TimeSpan Interval {
+            
             get {
                 return _curInterval;
             }
