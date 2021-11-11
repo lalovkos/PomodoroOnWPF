@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Windows.Xps.Serialization;
 using Timer = System.Timers.Timer;
 
@@ -40,17 +41,39 @@ namespace PomodoroOnWPF
         private TimerState _curState = TimerState.Stopped;
         private Window _curAlarmWindow = null;
         private System.Windows.Threading.DispatcherTimer _curTimer;
+        private AlarmTimer Timer_n = new AlarmTimer();
 
         public MainWindow()
         {
             InitializeComponent();
             SetStartButton("Start", StartButtonBrush);
-            _curTimer = new System.Windows.Threading.DispatcherTimer();
+            _curTimer = new DispatcherTimer();
             _curTimer.Tick += new EventHandler(TimerClick);
+
+            //Setting Display timer update
+            DispatcherTimer _displayTimer = new DispatcherTimer();
+            _displayTimer.Tick += new EventHandler(DisplayTimerReload);
+            _displayTimer.Interval = new TimeSpan(0, 0, 1);
+            _displayTimer.Start();
+
+            Timer_n.Tick += new EventHandler(MyAlarmMeth);
+            Timer_n.Interval = new TimeSpan(0, 0, 30);
+            Timer_n.Start();
+
         }
 
         private void TimerClick(object sender, EventArgs e) {
             this.TimerTB.Text = _curTimer.Interval.ToString();
+        }
+
+        private void MyAlarmMeth(object sender, EventArgs e) {
+            ShowAlarm();
+        }
+
+        private void DisplayTimerReload(object sender, EventArgs e) {
+            DateTime cur_date_time = DateTime.Now;
+            this.TimerTB.Text = cur_date_time.ToLongTimeString();
+            
         }
 
         private void StartStopBt_Click(object sender, RoutedEventArgs e)
@@ -59,7 +82,7 @@ namespace PomodoroOnWPF
             {
                 _curState = TimerState.WorkTime;
                 SetStartButton("Start", StartButtonBrush);
-                _curTimer.Interval = new TimeSpan(0,10, 0);
+                _curTimer.Interval = new TimeSpan(0, int.Parse(this.WorkTimerTB.Text.ToString()), 0);
                 _curTimer.Start();
 
             }
@@ -67,7 +90,7 @@ namespace PomodoroOnWPF
             {
                 _curState = TimerState.Stopped;
                 SetStartButton("Stop", StopButtonBrush);
-                _curTimer.Interval = new TimeSpan(0, 30, 0);
+                _curTimer.Interval = new TimeSpan(0, int.Parse(this.RelaxTimerTB.Text.ToString()), 0);
                 _curTimer.Start();
             }
         }
@@ -140,9 +163,11 @@ namespace PomodoroOnWPF
             e.Handled = onlyNumbersRegex.IsMatch(e.Text);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            ShowAlarm();
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            if (Timer_n.IsEnabled) {
+                Timer_n.Stop();
+            }
+            else Timer_n.Start();
         }
 
     }

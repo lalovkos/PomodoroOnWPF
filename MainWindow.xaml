@@ -6,13 +6,7 @@
         xmlns:local="clr-namespace:PomodoroOnWPF"
         mc:Ignorable="d"
         Title="PomodoroTimer" Height="450" Width="800">
-    <Grid x:Name="PomodoroTimer">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="77*"/>
-            <ColumnDefinition Width="21*"/>
-            <ColumnDefinition Width="641*"/>
-            <ColumnDefinition Width="61*"/>
-        </Grid.ColumnDefinitions>
+    <Grid>
         <Button x:Name="StartStopBt" Content="Button" HorizontalAlignment="Left" Margin="50,158,0,0" VerticalAlignment="Top" Click="StartStopBt_Click" Height="50" Width="120" Grid.ColumnSpan="3"/>
         <TextBox x:Name="WorkTimerTB" HorizontalAlignment="Left" Margin="50,76,0,0" Text="52" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Background="#FFAFC9E2" PreviewTextInput="TimerTB_OnPreviewTextInput" Grid.ColumnSpan="3"/>
         <TextBox x:Name="RelaxTimerTB" HorizontalAlignment="Left" Margin="89,76,0,0" Text="13" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Background="#FF91E28B" PreviewTextInput="TimerTB_OnPreviewTextInput" Grid.Column="2"/>
@@ -20,7 +14,16 @@
         <Label x:Name="RelaxTimerLbl" Content="RelaxTimer&#xD;&#xA;" HorizontalAlignment="Left" Margin="89,46,0,0" VerticalAlignment="Top" Width="118" Height="23" Grid.Column="2"/>
         <Button Content="Button" Grid.Column="2" HorizontalAlignment="Left" Margin="70,259,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Button x:Name="PauseResumeBt" Content="Button" HorizontalAlignment="Left" Margin="87,158,0,0" VerticalAlignment="Top" Click="PauseResumeBt_Click" Height="50" Width="120" Grid.Column="2"/>
-        <TextBox x:Name="TimerTB" Grid.Column="2" HorizontalAlignment="Left" Margin="242,76,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="TimerTB" Grid.Column="2" HorizontalAlignment="Left" Margin="214,76,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        
+        <DataGrid x:Name="StatsDataGrid" Margin="342,45,30,21" Grid.Column="2" Width="150" Grid.ColumnSpan="2" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="100"/>
+                <DataGridTextColumn Width="50"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Margin="38,127,288,121">
 
+        </StackPanel>
     </Grid>
 </Window>
