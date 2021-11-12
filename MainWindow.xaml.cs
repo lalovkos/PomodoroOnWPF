@@ -30,41 +30,15 @@ namespace PomodoroOnWPF
         private static AlarmViewModel _controller;
         private AlarmViewModel _alarmViewModel { get; } = new AlarmViewModel();
 
-        public MainWindow()
-        {
+        public MainWindow() {
             InitializeComponent();
-            StartDisplayTimer();
             DataContext = _alarmViewModel;
             
         }
 
-        private void StartDisplayTimer() {
-            //Setting Display timer update
-            DispatcherTimer _displayTimer = new DispatcherTimer();
-            _displayTimer.Tick += new EventHandler(DisplayTimerReload);
-            _displayTimer.Interval = new TimeSpan(0, 0, 1);
-            _displayTimer.Start();
-        }
-
-        private void DisplayTimerReload(object sender, EventArgs e) {
-            //Reload clocks on screen
-            this.TimerTB.Text = DateTime.Now.ToLongTimeString();
-
-        }
-
-        private void StartStopBt_Click(object sender, RoutedEventArgs e)
-        {
-        }
-        
-        private void SetStartButton(string content, Brush brush) {
-            this.StartStopBt.Content = content;
-            this.StartStopBt.Background = brush;
-        }
-
         //Only numbers allowed
         private static readonly Regex onlyNumbersRegex = new Regex("[^0-9]");
-        private void TimerTB_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
+        private void TimerTB_OnPreviewTextInput(object sender, TextCompositionEventArgs e) {
             e.Handled = onlyNumbersRegex.IsMatch(e.Text);
         }
 

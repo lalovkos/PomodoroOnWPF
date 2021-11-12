@@ -11,7 +11,13 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Alarms}" SelectedItem="{Binding SelectedAlarm}" CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" Margin="135,10,10,84"/>
-        <TextBox Text="{Binding Path=RealTimeClock}"  x:Name="TimerTB" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <DataGrid ItemsSource="{Binding Alarms}" SelectedItem="{Binding SelectedAlarm}" CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" Margin="135,10,10,76" SelectionChanged="{Binding SelectionChangedCommand}"/>
+        <TextBox Text="{Binding RealTimeClock}"  x:Name="TimerTB" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="AddBt" Content="Add" HorizontalAlignment="Left" Margin="135,358,0,0" VerticalAlignment="Top" Command="{Binding AddRowCommand}" />
+        <Button x:Name="DeleteBt" Content="Delete" HorizontalAlignment="Left" Margin="180,358,0,0" VerticalAlignment="Top" Command="{Binding DeleteRowCommand}"/>
+        <Button x:Name="StartBt" Content="Start" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="120" Height="54" Command="{Binding StartTimerCommand}"  Visibility="{Binding StartBtVisible}"/>
+        <Button x:Name="ResetBt" Content="Reset" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="120" Height="54" Command="{Binding ResetTimerCommand}"  Visibility="{Binding ResetBtVisible}"/>
+        <Button x:Name="PauseBt" Content="Pause" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="120" Height="54" Command="{Binding PauseTimerCommand}"  Visibility="{Binding PauseBtVisible}"/>
+        <Button x:Name="ResumeBt" Content="Resume" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="120" Height="54" Command="{Binding ResumeTimerCommand}" Visibility="{Binding ResumeBtVisible}"/>
     </Grid>
 </Window>
