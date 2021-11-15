@@ -13,7 +13,6 @@ namespace PomodoroOnWPF {
         private DateTime _lastPauseDateTime;
         private TimeSpan _startedInterval;
 
-        private TimeSpan _interval;
         public new TimeSpan Interval{
             
             get {
@@ -21,7 +20,6 @@ namespace PomodoroOnWPF {
             }
 
             set {
-                _interval = value;
                 base.Interval = value;
                 _startedInterval = value;
                 base.Stop();
@@ -44,7 +42,7 @@ namespace PomodoroOnWPF {
 
         public new void Stop() {
             base.Interval = TimeLeft();
-            this._interval = TimeLeft();
+            TimeLeft();
             base.Stop();
         }
 

@@ -130,6 +130,10 @@ namespace PomodoroOnWPF
 
         }
 
+        private void NextTimer() {
+
+        }
+
         public void ShowAlarm(object sender = null, EventArgs e = null) {
             _curAlarmWindow = new AlarmWindow("Start", "Next stage", null, AlarmWindowClosed);
             _curAlarmWindow.Activate();
