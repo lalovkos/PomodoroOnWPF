@@ -25,15 +25,11 @@ namespace PomodoroOnWPF
     public partial class MainWindow : Window
     {
 
-        private static readonly SolidColorBrush StartButtonBrush = new SolidColorBrush(Color.FromRgb(34, 139, 34));
-        private static readonly SolidColorBrush StopButtonBrush  = new SolidColorBrush(Color.FromRgb(128, 0, 0));
-        private static AlarmViewModel _controller;
         private AlarmViewModel _alarmViewModel { get; } = new AlarmViewModel();
 
         public MainWindow() {
             InitializeComponent();
             DataContext = _alarmViewModel;
-            
         }
 
         //Only numbers allowed

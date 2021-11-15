@@ -15,15 +15,12 @@ using System.Windows.Shapes;
 
 namespace PomodoroOnWPF
 {
-    /// <summary>
-    /// Interaction logic for AlarmWindow.xaml
-    /// </summary>
     public partial class AlarmWindow : Window {
         
         private bool resume = false;
-        private Action<object> _on_close_func;
+        private readonly Action<object> _onCloseFunc;
 
-        public AlarmWindow(string label = null, string Bt_label = null, Brush bt_brush = null, Action<object> _onCloseFunc = null) {
+        public AlarmWindow(string label = null, string Bt_label = null, Brush bt_brush = null, Action<object> on_close_func = null) {
             InitializeComponent();
 
             if (label != null)
@@ -37,13 +34,13 @@ namespace PomodoroOnWPF
                 this.NextBt.Background = bt_brush;
             }
 
-            _on_close_func = _onCloseFunc;
+            this._onCloseFunc = on_close_func;
         }
 
         private void AlarmWindow_OnClosed(object? sender, EventArgs e) {
-            if (_on_close_func != null)
+            if (_onCloseFunc != null)
             {
-                _on_close_func(resume);
+                _onCloseFunc(resume);
             }
         }
 

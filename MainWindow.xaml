@@ -11,8 +11,15 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Alarms}" SelectedItem="{Binding SelectedAlarm}" CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" Margin="135,10,10,76" SelectionChanged="{Binding SelectionChangedCommand}"/>
-        <TextBox Text="{Binding RealTimeClock}"  x:Name="TimerTB" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <DataGrid AutoGenerateColumns ="False" ItemsSource="{Binding Alarms, Mode=OneWay}" SelectedItem="{Binding SelectedAlarm}" CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" Margin="135,10,10,76">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Time left" Binding="{Binding TimeLeft}"/>
+                <DataGridTextColumn Header="Sum time" Binding="{Binding SumTime}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock Text="{Binding RealTimeClock}"  x:Name="TimerTB" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="AddBt" Content="Add" HorizontalAlignment="Left" Margin="135,358,0,0" VerticalAlignment="Top" Command="{Binding AddRowCommand}" />
         <Button x:Name="DeleteBt" Content="Delete" HorizontalAlignment="Left" Margin="180,358,0,0" VerticalAlignment="Top" Command="{Binding DeleteRowCommand}"/>
         <Button x:Name="StartBt" Content="Start" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="120" Height="54" Command="{Binding StartTimerCommand}"  Visibility="{Binding StartBtVisible}"/>

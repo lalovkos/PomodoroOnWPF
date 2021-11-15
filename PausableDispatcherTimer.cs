@@ -8,57 +8,54 @@ using System.Windows.Threading;
 using Microsoft.VisualBasic;
 
 namespace PomodoroOnWPF {
-    class AlarmTimer : DispatcherTimer {
+    class PausableDispatcherTimer : DispatcherTimer {
 
         private DateTime _lastPauseDateTime;
         private TimeSpan _startedInterval;
-        private TimeSpan _curInterval;
 
-        private new TimeSpan Interval {
+        private TimeSpan _interval;
+        public new TimeSpan Interval{
             
             get {
-                return _curInterval;
+                return _startedInterval;
             }
 
             set {
+                _interval = value;
+                base.Interval = value;
                 _startedInterval = value;
-                _curInterval = value;
-                this.Interval = value;
+                base.Stop();
             }
-        }
-
-        public AlarmTimer() : base() {
-            _lastPauseDateTime = DateTime.Now;
+            
         }
 
         public TimeSpan TimeLeft() {
             if (this.IsEnabled) {
-                return (_lastPauseDateTime + _curInterval) - DateTime.Now;
+                return (_lastPauseDateTime + base.Interval) - DateTime.Now;
             }
             else {
-                return this.Interval;
+                return base.Interval;
             }
+        }
 
+        public TimeSpan TimePassed() {
+            return this._startedInterval - TimeLeft();
         }
 
         public new void Stop() {
+            base.Interval = TimeLeft();
+            this._interval = TimeLeft();
             base.Stop();
-            _curInterval = TimeLeft();
-            this.Interval = _curInterval;
-            _lastPauseDateTime = DateTime.Now;
-
         }
 
         public new void Start() {
-            base.Start();
             _lastPauseDateTime = DateTime.Now;
+            base.Start();
         }
 
-        public void Reset(bool stop = false) {
-            this.Interval = _startedInterval;
-            if (stop) {
-                this.Stop();
-            }
+        public void Reset() {
+            base.Stop();
+            base.Interval = _startedInterval;
         }
 
     };
