@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Documents.DocumentStructures;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PomodoroOnWPF
 {
@@ -48,6 +49,7 @@ namespace PomodoroOnWPF
             }
         }
         public AlarmStats SelectedAlarm { get; set; }
+        public int SelectedIndex;
 
         private AlarmStats _curTimer;
 
@@ -70,7 +72,6 @@ namespace PomodoroOnWPF
         public Visibility ResetBtVisible { get; set; } = Visibility.Hidden;
         public Visibility PauseBtVisible { get; set; } = Visibility.Visible;
         public Visibility ResumeBtVisible { get; set; } = Visibility.Hidden;
-
 
         //Current alarm window
         private AlarmWindow _curAlarmWindow;
@@ -131,7 +132,9 @@ namespace PomodoroOnWPF
         }
 
         private void NextTimer() {
-
+            if (SelectedIndex == Alarms.Count - 1) {
+                SelectedIndex = 0;
+            }
         }
 
         public void ShowAlarm(object sender = null, EventArgs e = null) {
@@ -148,26 +151,17 @@ namespace PomodoroOnWPF
         private void StartTimer() {
             if (_curTimer == null) return;
 
-            //Buttons visibility
-            StartBtVisible = Visibility.Hidden;
-            ResetBtVisible = Visibility.Visible;
-            OnPropertyChanged("StartBtVisible");
-            OnPropertyChanged("ResetBtVisible");
+            SetBtVisibility(false, true, true, false);
 
             //Start current timer
             _curTimer = SelectedAlarm;
             _curTimer.Start();
         }
+
         private void ResetTimer() {
             if (_curTimer == null) return;
 
-            ResumeTimer();
-
-            //Buttons visibility
-            StartBtVisible = Visibility.Visible;
-            ResetBtVisible = Visibility.Hidden;
-            OnPropertyChanged("StartBtVisible");
-            OnPropertyChanged("ResetBtVisible");
+            SetBtVisibility(true, false, false, true);
 
             //Reset current timer
             _curTimer.Reset(false);
@@ -175,26 +169,29 @@ namespace PomodoroOnWPF
         private void PauseTimer() {
             if (_curTimer == null) return;
 
-            //Buttons visibility
-            PauseBtVisible = Visibility.Hidden;
-            ResumeBtVisible = Visibility.Visible;
-            OnPropertyChanged("PauseBtVisible");
-            OnPropertyChanged("ResumeBtVisible");
+            SetBtVisibility(false, true, false, true);
 
             //Pause current timer
             _curTimer.Stop();
         }
         private void ResumeTimer() {
             if (_curTimer == null) return;
+            SetBtVisibility(false, true, true, false);
 
-            //Buttons visibility
-            PauseBtVisible = Visibility.Visible;
-            ResumeBtVisible = Visibility.Hidden;
+            //Start current timer
+            _curTimer.Start();
+        }
+
+        private void SetBtVisibility(bool start_bt, bool reset_bt, bool pause_bt, bool resume_bt) {
+            StartBtVisible = start_bt ? Visibility.Visible : Visibility.Hidden;
+            ResetBtVisible = reset_bt ? Visibility.Visible : Visibility.Hidden;
+            PauseBtVisible = pause_bt ? Visibility.Visible : Visibility.Hidden;
+            ResumeBtVisible = resume_bt ? Visibility.Visible : Visibility.Hidden;
+            OnPropertyChanged("StartBtVisible");
+            OnPropertyChanged("ResetBtVisible");
             OnPropertyChanged("PauseBtVisible");
             OnPropertyChanged("ResumeBtVisible");
 
-            //Resume current timer
-            _curTimer.Start();
         }
 
     }

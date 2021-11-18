@@ -7,17 +7,27 @@
         mc:Ignorable="d"
         Title="PomodoroTimer" Height="450" Width="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <DataGrid AutoGenerateColumns ="False" ItemsSource="{Binding Alarms, Mode=OneWay}" SelectedItem="{Binding SelectedAlarm}" CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" Margin="135,10,10,76">
+        <DataGrid SelectionUnit="FullRow" SelectionMode="Single" AutoGenerateColumns ="False" ItemsSource="{Binding Alarms, Mode=OneWay}" SelectedItem="{Binding SelectedAlarm}" SelectedIndex="{Binding SelectedIndex}" CanUserAddRows="True" CanUserDeleteRows="True" CanUserSortColumns="True" CanUserReorderColumns="True" Margin="135,10,10,76">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="150"/>
+                <DataGridTextColumn Header="Interval" Binding="{Binding Interval}"/>
                 <DataGridTextColumn Header="Time left" Binding="{Binding TimeLeft}"/>
                 <DataGridTextColumn Header="Sum time" Binding="{Binding SumTime}"/>
+                <DataGridTextColumn Header="PausesCount" Binding="{Binding PausesCount}"/>
             </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                            <Setter Property="Background" Value="Red"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                            <Setter Property="Background" Value="Green"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
         </DataGrid>
         <TextBlock Text="{Binding RealTimeClock}"  x:Name="TimerTB" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="AddBt" Content="Add" HorizontalAlignment="Left" Margin="135,358,0,0" VerticalAlignment="Top" Command="{Binding AddRowCommand}" />
@@ -26,5 +36,6 @@
         <Button x:Name="ResetBt" Content="Reset" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="120" Height="54" Command="{Binding ResetTimerCommand}"  Visibility="{Binding ResetBtVisible}"/>
         <Button x:Name="PauseBt" Content="Pause" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="120" Height="54" Command="{Binding PauseTimerCommand}"  Visibility="{Binding PauseBtVisible}"/>
         <Button x:Name="ResumeBt" Content="Resume" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top" Width="120" Height="54" Command="{Binding ResumeTimerCommand}" Visibility="{Binding ResumeBtVisible}"/>
+        <Button x:Name="sda" Content="sda" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Width="120" Height="54" Command="{Binding NextTimerCommand}"/>
     </Grid>
 </Window>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace PomodoroOnWPF
 {
@@ -22,9 +23,40 @@ namespace PomodoroOnWPF
         #endregion
 
         public string Name { get; set; }
-        public TimeSpan Interval { get; set; }
+
+        private TimeSpan _interval;
+        public TimeSpan Interval {
+            get {
+                return this._interval;
+            }
+            set {
+                this._interval = value;
+                OnPropertyChanged();
+            }
+        }
         public string Description { get; set; }
-        public int PausesCount { get; set; }
+        private int _pausesCount;
+        public int PausesCount {
+            get {
+                return _pausesCount;
+            } 
+            set {
+                this._pausesCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isEnabled;
+        public bool IsEnabled {
+            get {
+                return this._isEnabled;
+            }
+            private set {
+                this._isEnabled = value;
+                this._timer.IsEnabled = value;
+                OnPropertyChanged("IsEnabled");
+            }
+        }
 
         private string _timeLeft;
         public string TimeLeft {
@@ -65,6 +97,7 @@ namespace PomodoroOnWPF
             this.Interval = interval;
             this.PausesCount = 0;
             this._timer.Interval = interval;
+            this.IsEnabled = this._timer.IsEnabled;
         }
 
         public void Reload() {
@@ -75,10 +108,12 @@ namespace PomodoroOnWPF
 
         public void Start() {
             _timer.Start();
+            UpdateIsEnabled();
         }
 
         public void Stop() {
             _timer.Stop();
+            UpdateIsEnabled();
             PausesCount++;
         }
 
@@ -93,7 +128,13 @@ namespace PomodoroOnWPF
 
             //Resetting timer
             _timer.Reset();
+
+            UpdateIsEnabled();
             Reload();
+        }
+
+        private void UpdateIsEnabled() {
+            IsEnabled = _timer.IsEnabled;
         }
 
     }
