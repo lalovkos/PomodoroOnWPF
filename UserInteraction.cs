@@ -12,9 +12,6 @@ namespace PomodoroOnWPF
 
         private static readonly UserInteraction instance = new UserInteraction();
 
-        public UserInteraction() {
-        }
-
         public static UserInteraction getInstance() {
             return instance;
         }

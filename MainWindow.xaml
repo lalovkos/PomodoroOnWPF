@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PomodoroOnWPF"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="PomodoroTimer" Height="450" Width="800">
     <Grid>
@@ -11,10 +12,16 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="150"/>
-                <DataGridTextColumn Header="Interval" Binding="{Binding Interval}"/>
-                <DataGridTextColumn Header="Time left" Binding="{Binding TimeLeft}"/>
-                <DataGridTextColumn Header="Sum time" Binding="{Binding SumTime}"/>
-                <DataGridTextColumn Header="PausesCount" Binding="{Binding PausesCount}"/>
+                <DataGridTemplateColumn Header="Interval">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <xctk:MaskedTextBox Mask="00:00:00" Text="{Binding Interval}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Time left" Binding="{Binding TimeLeft}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Sum time" Binding="{Binding SumTime}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="PausesCount" Binding="{Binding PausesCount}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Enabled" Binding="{Binding IsEnabled}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
