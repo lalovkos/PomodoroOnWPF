@@ -31,10 +31,12 @@ namespace PomodoroOnWPF
             }
             set {
                 this._interval = value;
+                this._timer.Interval = value;
                 OnPropertyChanged();
             }
         }
         public string Description { get; set; }
+
         private int _pausesCount;
         public int PausesCount {
             get {
@@ -91,11 +93,12 @@ namespace PomodoroOnWPF
 
         private readonly PausableDispatcherTimer _timer = new PausableDispatcherTimer();
 
-        public AlarmStats(string name, TimeSpan interval, string description = "") {
+        public AlarmStats(string name, TimeSpan interval, EventHandler on_timer_elapse = null, string description = "") {
             this.Name = name;
             this.Description = description;
             this.Interval = interval;
             this.PausesCount = 0;
+            this._timer.Tick += on_timer_elapse;
             this._timer.Interval = interval;
             this.IsEnabled = this._timer.IsEnabled;
         }

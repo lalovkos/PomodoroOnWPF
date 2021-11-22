@@ -24,7 +24,6 @@ namespace PomodoroOnWPF
     
     public partial class MainWindow : Window
     {
-
         private AlarmViewModel _alarmViewModel { get; } = new AlarmViewModel();
 
         public MainWindow() {

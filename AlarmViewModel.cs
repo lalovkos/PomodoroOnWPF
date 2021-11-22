@@ -20,6 +20,7 @@ namespace PomodoroOnWPF
     public class AlarmViewModel : INotifyPropertyChanged {
 
         public readonly TimeSpan STANDART_DATA_RELOAD_TIMESPAN = new TimeSpan(0, 0, 0, 0, 250);
+        private readonly UserInteraction MainUI = UserInteraction.getInstance();
 
         #region EventHandler
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,10 +50,11 @@ namespace PomodoroOnWPF
             }
         }
         public AlarmStats SelectedAlarm { get; set; }
-        public int SelectedIndex;
-
+        public int SelectedIndex { get; set; }
+        
+        private int _curTimerIndex;
         private AlarmStats _curTimer;
-
+        
         #region Commands
         public ICommand AddRowCommand { get; set; }
         public ICommand DeleteRowCommand { get; set; }
@@ -73,9 +75,6 @@ namespace PomodoroOnWPF
         public Visibility PauseBtVisible { get; set; } = Visibility.Visible;
         public Visibility ResumeBtVisible { get; set; } = Visibility.Hidden;
 
-        //Current alarm window
-        private AlarmWindow _curAlarmWindow;
-
         public AlarmViewModel() {
 
             BindCommands();
@@ -86,8 +85,13 @@ namespace PomodoroOnWPF
             //Adding 2 starting standart rows
             AddRow();
             AddRow();
+            Alarms[0].Reload();
+            Alarms[1].Reload();
+
+            //Select standart row
             SelectedAlarm = Alarms[0];
             _curTimer = SelectedAlarm;
+            _curTimerIndex = 0;
         }
 
         private void StartGlobalTimer() {
@@ -111,7 +115,8 @@ namespace PomodoroOnWPF
 
         private void AddRow() {
             if (_alarms.Count < 10) {
-                _alarms.Add(new AlarmStats("Work", new TimeSpan(0, 20, 0)));
+                string timer_name = "Timer" + (Alarms.Count + 1);
+                _alarms.Add(new AlarmStats(timer_name, new TimeSpan(0, 0, 10), new EventHandler(TimerElapsed)));
             }
         }
 
@@ -131,21 +136,32 @@ namespace PomodoroOnWPF
 
         }
 
+        public void TimerElapsed(object sender = null, EventArgs e = null) {
+            ShowAlarm();
+        }
+
         private void NextTimer() {
-            if (SelectedIndex == Alarms.Count - 1) {
-                SelectedIndex = 0;
-            }
+            //TODO: Working, but could be much easier
+            int next_timer_index = (_curTimerIndex == Alarms.Count - 1) ? 0 : _curTimerIndex + 1;
+            _curTimerIndex = next_timer_index;
+            SelectedAlarm = Alarms[next_timer_index];
+            SelectedIndex = next_timer_index;
+            StartTimer();
         }
 
         public void ShowAlarm(object sender = null, EventArgs e = null) {
-            _curAlarmWindow = new AlarmWindow("Start", "Next stage", null, AlarmWindowClosed);
-            _curAlarmWindow.Activate();
-            _curAlarmWindow.Show();
+            _curTimer.Reset(true);
+            MainUI.createAlarmWindow(_curTimer.Name, _curTimer.Description, _curTimer.Name, null, AlarmWindowClosed);
         }
 
         public void AlarmWindowClosed(object resume) {
-            if (resume is bool && (bool) resume) { ResumeTimer();}
-            else { PauseTimer(); }
+            if (resume is bool b and true) {
+                NextTimer();
+                ResumeTimer();
+            }
+            else {
+                PauseTimer();
+            }
         }
 
         private void StartTimer() {
@@ -155,9 +171,9 @@ namespace PomodoroOnWPF
 
             //Start current timer
             _curTimer = SelectedAlarm;
+            _curTimerIndex = SelectedIndex;
             _curTimer.Start();
         }
-
         private void ResetTimer() {
             if (_curTimer == null) return;
 
@@ -181,7 +197,6 @@ namespace PomodoroOnWPF
             //Start current timer
             _curTimer.Start();
         }
-
         private void SetBtVisibility(bool start_bt, bool reset_bt, bool pause_bt, bool resume_bt) {
             StartBtVisible = start_bt ? Visibility.Visible : Visibility.Hidden;
             ResetBtVisible = reset_bt ? Visibility.Visible : Visibility.Hidden;

@@ -41,7 +41,7 @@ namespace PomodoroOnWPF {
         }
 
         public new void Stop() {
-            base.Interval = TimeLeft();
+            base.Interval = (TimeLeft() > new TimeSpan(0,0,0,0,0)) ? TimeLeft() : _startedInterval;
             base.Stop();
         }
 

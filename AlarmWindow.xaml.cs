@@ -36,7 +36,7 @@ namespace PomodoroOnWPF
 
             this._onCloseFunc = on_close_func;
         }
-
+        
         private void AlarmWindow_OnClosed(object? sender, EventArgs e) {
             if (_onCloseFunc != null)
             {
