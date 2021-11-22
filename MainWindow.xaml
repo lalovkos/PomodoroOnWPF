@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PomodoroOnWPF"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      
         mc:Ignorable="d"
         Title="PomodoroTimer" Height="450" Width="800">
     <Grid>
@@ -12,13 +12,25 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="150"/>
-                <DataGridTemplateColumn Header="Interval">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <xctk:MaskedTextBox Mask="00:00:00" Text="{Binding Interval}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Interval" Binding="{Binding Interval, StringFormat=hh\\:mm\\:ss}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                    <Setter Property="IsEnabled" Value="True"></Setter>
+                                    <Setter Property="Background" Value="Red"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                    <Setter Property="Background" Value="Green"></Setter>
+                                </DataTrigger>
+                                <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="LightBlue" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Time left" Binding="{Binding TimeLeft}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Sum time" Binding="{Binding SumTime}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="PausesCount" Binding="{Binding PausesCount}" IsReadOnly="True"/>

@@ -20,9 +20,9 @@ namespace PomodoroOnWPF {
             }
 
             set {
+                base.Stop();
                 base.Interval = value;
                 _startedInterval = value;
-                base.Stop();
             }
             
         }
